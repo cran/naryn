@@ -1,3 +1,16 @@
+# naryn 2.6.12
+
+* Fixed: hang when all iterator intervals were outside of `stime` and `etime`. 
+
+# naryn 2.6.11
+
+* Fixed an additional clang warning.
+
+# naryn 2.6.10
+
+* removed `emr_traceback` function
+* Fixed C++ compilation warnings and possible memory leaks.
+
 # naryn 2.6.9 
 
 * Removed global variables from the package - EMR_ROOTS, EMR_GROOT, EMR_UROOT, EMR_FILTERS and EMR_VTRACKS are now a part of a dedicated environment called `.naryn`. You can access them using `.naryn::EMR_ROOTS` etc. 
