@@ -46,6 +46,21 @@ test_that("create and remove categorical", {
     expect_false(emr_track.exists("test_track1"))
 })
 
+test_that("create and remove categorical multiple tracks", {
+    emr_track.rm("test_track1", TRUE)
+    emr_track.rm("test_track2", TRUE)
+    r_extract <- emr_extract("track0+2", keepref = TRUE, names = "test_track1")
+    emr_track.create("test_track1", "user", FALSE, "track0+2", keepref = TRUE)
+    emr_track.create("test_track2", "user", FALSE, "track0+2", keepref = TRUE)
+    expect_true(emr_track.exists("test_track1"))
+    expect_true(emr_track.exists("test_track2"))
+    r_create <- emr_extract("test_track1", keepref = TRUE)
+    expect_equal(r_extract, r_create)
+    emr_track.rm(c("test_track1", "test_track2"), TRUE)
+    expect_false(emr_track.exists("test_track1"))
+    expect_false(emr_track.exists("test_track2"))
+})
+
 test_that("create categorical keepref=FALSE", {
     emr_track.rm("test_track1", TRUE)
     r_extract <- emr_extract("track0+2", keepref = FALSE, names = "test_track1")
@@ -84,4 +99,9 @@ test_that("emr_track.mv works with different values", {
     expect_false(emr_track.exists("test_track1"))
     expect_true(emr_track.exists("test_track2"))
     withr::defer(emr_track.rm("test_track2", TRUE))
+})
+
+test_that("emr_track.rm doesn't fail when given character(0)", {
+    emr_track.rm(character(0))
+    expect_true(TRUE)
 })

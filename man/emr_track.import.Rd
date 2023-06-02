@@ -4,7 +4,14 @@
 \alias{emr_track.import}
 \title{Imports a track from a file or data-frame}
 \usage{
-emr_track.import(track, space, categorical, src, override = FALSE)
+emr_track.import(
+  track,
+  space,
+  categorical,
+  src,
+  override = FALSE,
+  remove_unknown = FALSE
+)
 }
 \arguments{
 \item{track}{the name of the newly created track}
@@ -16,6 +23,8 @@ emr_track.import(track, space, categorical, src, override = FALSE)
 \item{src}{file name or data-frame containing the track records}
 
 \item{override}{Boolean indicating whether the creation intends to override an existing track (default FALSE)}
+
+\item{remove_unknown}{if 'TRUE', removes unknown ids (ids that are not present at 'patients.dob' track) from the data. Otherwise, an error is thrown.}
 }
 \value{
 None.
@@ -38,6 +47,32 @@ the following columns: "id" "time" "ref" and "value". Note that the
 file should not contain a header.
 
 (see "User Manual" for more info).
+}
+\examples{
+emr_db.init_examples()
+
+# import from data frame
+emr_track.import(
+    "new_track",
+    categorical = TRUE,
+    src = data.frame(id = c(5, 10), time = c(1, 2), value = c(10, 20))
+)
+
+# import from file
+fn <- tempfile()
+write.table(
+    data.frame(id = c(5, 10), time = c(1, 2), reference = c(1, 1), value = c(10, 20)),
+    file = fn, sep = "\t", row.names = FALSE, col.names = FALSE
+)
+emr_track.import("new_track1", categorical = TRUE, src = fn)
+
+# create an empty track
+emr_track.import(
+    "empty_track",
+    categorical = TRUE,
+    src = data.frame(id = numeric(), time = numeric(), value = numeric())
+)
+
 }
 \seealso{
 \code{\link{emr_track.addto}}, \code{\link{emr_track.create}},

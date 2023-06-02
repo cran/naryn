@@ -157,13 +157,13 @@ test_that("emr_extract with filter", {
     expect_regression(emr_extract("track2_sparse", stime = 10, etime = 1000, keepref = TRUE, filter = "track1_sparse"), "extract.36")
 })
 
-# test_that("emr_extract #3", {
-#     set.seed(17)
-#     n <- 10000
-#     df <- data.frame(id = sample(c(0:1005), n, replace = TRUE), stime = sample(c(0:11000), n, replace = TRUE), etime = 0)
-#     df$etime <- df$stime + sample(c(0:1000), n, replace = TRUE)
-#     expect_regression(emr_extract("1", iterator = df), "extract.37", "1")
-# })
+test_that("emr_extract #3", {
+    set.seed(17)
+    n <- 10000
+    df <- data.frame(id = sample(c(0:1005), n, replace = TRUE), stime = sample(c(0:11000), n, replace = TRUE), etime = 0)
+    df$etime <- df$stime + sample(c(0:1000), n, replace = TRUE)
+    expect_regression(emr_extract("1", iterator = df), "extract.37")
+})
 
 test_that("emr_extract with or filter", {
     set.seed(17)

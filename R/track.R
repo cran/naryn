@@ -106,12 +106,13 @@
 #' @param src file name or data-frame containing the track records
 #' @param force if 'TRUE', suppresses user confirmation for addition to
 #' logical tracks
+#' @param remove_unknown if 'TRUE', removes unknown ids (ids that are not present at 'patients.dob' track) from the data. Otherwise, an error is thrown.
 #' @return None.
 #' @seealso \code{\link{emr_track.import}}, \code{\link{emr_track.create}},
 #' \code{\link{emr_db.init}}, \code{\link{emr_track.ls}}
 #' @keywords ~import
 #' @export emr_track.addto
-emr_track.addto <- function(track, src, force = FALSE) {
+emr_track.addto <- function(track, src, force = FALSE, remove_unknown = FALSE) {
     if (missing(track) || missing(src)) {
         stop("Usage: emr_track.addto(track, src)", call. = FALSE)
     }
@@ -172,7 +173,7 @@ emr_track.addto <- function(track, src, force = FALSE) {
         }
     }
 
-    .emr_call("emr_import", track, NULL, NULL, src, TRUE, .emr_env())
+    .emr_call("emr_import", track, NULL, NULL, src, TRUE, force, remove_unknown, .emr_env())
 }
 
 #' Creates a track from a track expression
@@ -196,24 +197,28 @@ emr_track.addto <- function(track, src, force = FALSE) {
 #' @param keepref If 'TRUE' references are preserved in the iterator
 #' @param filter Iterator filter
 #' @param override Boolean indicating whether the creation intends to override an existing track (default FALSE)
+#'
 #' @return None.
+#'
+#' @examples
+#' emr_db.init_examples()
+#'
+#' emr_track.create("new_dense_track", expr = "dense_track * 2", categorical = FALSE)
+#' emr_extract("new_dense_track")
+#'
 #' @seealso \code{\link{emr_track.import}}, \code{\link{emr_track.addto}},
 #' \code{\link{emr_track.rm}}, \code{\link{emr_track.readonly}},
 #' \code{\link{emr_track.ls}}, \code{\link{emr_track.exists}}
 #' @keywords ~track ~create
 #' @export emr_track.create
-emr_track.create <- function(track, space = .naryn$EMR_UROOT, categorical, expr, stime = NULL, etime = NULL, iterator = NULL, keepref = FALSE, filter = NULL, override = FALSE) {
+emr_track.create <- function(track, space, categorical, expr, stime = NULL, etime = NULL, iterator = NULL, keepref = FALSE, filter = NULL, override = FALSE) {
     # when space is missing, writing for the last db in the order of connections
     if (missing(space)) {
-        if ((!exists("EMR_UROOT", envir = .naryn) || is.null(get("EMR_UROOT", envir = .naryn)))) {
-            space <- .naryn$EMR_GROOT
-        } else {
-            space <- .naryn$EMR_UROOT
-        }
+        space <- emr_db.ls()[length(emr_db.ls())]
     }
 
     if (missing(track) || missing(categorical) || missing(expr)) {
-        stop("Usage: emr_track.create(track, space = .naryn$EMR_GROOT, categorical, expr, stime = NULL, etime = NULL, iterator = NULL, keepref = FALSE, filter = NULL)", call. = FALSE)
+        stop("Usage: emr_track.create(track, space, categorical, expr, stime = NULL, etime = NULL, iterator = NULL, keepref = FALSE, filter = NULL)", call. = FALSE)
     }
     .emr_checkroot()
 
@@ -347,21 +352,46 @@ emr_track.ids <- function(track) {
 #' @param categorical if 'TRUE' track is marked as categorical
 #' @param src file name or data-frame containing the track records
 #' @param override Boolean indicating whether the creation intends to override an existing track (default FALSE)
+#' @param remove_unknown if 'TRUE', removes unknown ids (ids that are not present at 'patients.dob' track) from the data. Otherwise, an error is thrown.
+#'
 #' @return None.
+#'
+#' @examples
+#' emr_db.init_examples()
+#'
+#' # import from data frame
+#' emr_track.import(
+#'     "new_track",
+#'     categorical = TRUE,
+#'     src = data.frame(id = c(5, 10), time = c(1, 2), value = c(10, 20))
+#' )
+#'
+#' # import from file
+#' fn <- tempfile()
+#' write.table(
+#'     data.frame(id = c(5, 10), time = c(1, 2), reference = c(1, 1), value = c(10, 20)),
+#'     file = fn, sep = "\t", row.names = FALSE, col.names = FALSE
+#' )
+#' emr_track.import("new_track1", categorical = TRUE, src = fn)
+#'
+#' # create an empty track
+#' emr_track.import(
+#'     "empty_track",
+#'     categorical = TRUE,
+#'     src = data.frame(id = numeric(), time = numeric(), value = numeric())
+#' )
+#'
 #' @seealso \code{\link{emr_track.addto}}, \code{\link{emr_track.create}},
 #' \code{\link{emr_track.readonly}}, \code{\link{emr_db.init}},
 #' \code{\link{emr_track.ls}}
 #' @keywords ~import
 #' @export emr_track.import
-emr_track.import <- function(track, space, categorical, src, override = FALSE) {
+emr_track.import <- function(track, space, categorical, src, override = FALSE, remove_unknown = FALSE) {
     # when space is missing, writing for the last db in the order of connections
     if (missing(space)) {
-        if ((!exists("EMR_UROOT", envir = .naryn) || is.null(get("EMR_UROOT", envir = .naryn)))) {
-            space <- .naryn$EMR_GROOT
-        } else {
-            space <- .naryn$EMR_UROOT
-        }
+        space <- emr_db.ls()[length(emr_db.ls())]
     }
+
     if (missing(track) || missing(src) || missing(categorical)) {
         stop("Usage: emr_track.import(track, space, categorical, src)", call. = FALSE)
     }
@@ -376,7 +406,7 @@ emr_track.import <- function(track, space, categorical, src, override = FALSE) {
     }
 
     db_id <- ._emr_backward_comp_space(space)
-    .emr_call("emr_import", track, db_id, categorical, src, FALSE, override, .emr_env())
+    .emr_call("emr_import", track, db_id, categorical, src, FALSE, override, remove_unknown, .emr_env())
 }
 
 
@@ -800,7 +830,7 @@ emr_track.readonly <- function(track, readonly = NULL) {
 #' 'emr_track.rm' requires the user to interactively confirm the deletion. Set
 #' 'force' to 'TRUE' to suppress the user prompt.
 #'
-#' @param track track name
+#' @param track one or more track names to delete
 #' @param force if 'TRUE', suppresses user confirmation of a named track removal
 #' @return None.
 #' @seealso \code{\link{emr_track.create}}, \code{\link{emr_track.mv}},
@@ -811,6 +841,23 @@ emr_track.rm <- function(track, force = FALSE) {
     if (missing(track)) {
         stop("Usage: emr_track.rm(track, force = FALSE)", call. = FALSE)
     }
+
+    if (length(track) > 1) {
+        tryCatch(
+            {
+                purrr::walk(track, remove_track, force = force, update = FALSE)
+            },
+            finally = {
+                emr_db.reload()
+            }
+        )
+        emr_db.reload()
+    } else if (length(track) == 1) {
+        remove_track(track, force = force, update = TRUE)
+    }
+}
+
+remove_track <- function(track, force = TRUE, update = TRUE) {
     .emr_checkroot()
     if (!emr_track.exists(track)) {
         if (force) {
@@ -868,7 +915,7 @@ emr_track.rm <- function(track, force = FALSE) {
             emr_track.logical.rm(ltrack, force = TRUE)
         }
 
-        .emr_call("emr_track_rm", track, .emr_env())
+        .emr_call("emr_track_rm", track, update, new.env(parent = parent.frame()))
 
         if (file.exists(dirname1)) {
             unlink(dirname1, recursive = TRUE)
@@ -879,8 +926,6 @@ emr_track.rm <- function(track, force = FALSE) {
         }
     }
 }
-
-
 
 #' Returns track values
 #'

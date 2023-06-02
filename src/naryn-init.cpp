@@ -24,7 +24,7 @@ extern SEXP C_emr_extract(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
 extern SEXP emr_ids_dist(SEXP, SEXP, SEXP);
 extern SEXP emr_ids_dist_with_iterator(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP emr_ids_vals_dist(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP emr_import(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP emr_import(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP emr_check_named_filter(SEXP, SEXP, SEXP);
 extern SEXP emr_check_filter_attr_src(SEXP, SEXP);
 extern SEXP emr_check_filter_attr_time_shift(SEXP, SEXP);
@@ -50,7 +50,7 @@ extern SEXP C_emr_time2month(SEXP, SEXP);
 extern SEXP C_emr_time2year(SEXP, SEXP);
 extern SEXP C_emr_date2time(SEXP, SEXP);
 extern SEXP emr_track_mv(SEXP, SEXP, SEXP, SEXP);
-extern SEXP emr_track_rm(SEXP, SEXP);
+extern SEXP emr_track_rm(SEXP, SEXP, SEXP);
 extern SEXP emr_track_info(SEXP, SEXP);
 extern SEXP emr_track_ids(SEXP, SEXP);
 extern SEXP emr_track_unique(SEXP, SEXP);
@@ -88,7 +88,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"emr_ids_dist", (DL_FUNC) &emr_ids_dist, 3},
     {"emr_ids_dist_with_iterator", (DL_FUNC) &emr_ids_dist_with_iterator, 6},
     {"emr_ids_vals_dist", (DL_FUNC) &emr_ids_vals_dist, 6},
-    {"emr_import", (DL_FUNC) &emr_import, 7},
+    {"emr_import", (DL_FUNC) &emr_import, 8},
     {"emr_check_named_filter", (DL_FUNC) &emr_check_named_filter, 3},
     {"emr_check_filter_attr_src", (DL_FUNC) &emr_check_filter_attr_src, 2},
     {"emr_check_filter_attr_time_shift",

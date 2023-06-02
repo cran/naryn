@@ -962,6 +962,7 @@ test_that("emr_ids_coverage works", {
     emr_track.logical.create("l18", "ph1", 18)
 
     df <- emr_extract("ph1", keepref = TRUE)
+    emr_track.addto("patients.dob", src = data.frame(id = 2510, time = 0, ref = -1, value = 0))
     emr_track.import("p15", space = "global", categorical = TRUE, src = df %>% dplyr::filter(ph1 == 15) %>% dplyr::select(id, time, ref, value = ph1))
     emr_track.import("p18", space = "global", categorical = TRUE, src = df %>% dplyr::filter(ph1 == 18) %>% dplyr::select(id, time, ref, value = ph1))
     withr::defer(emr_track.rm("p15", force = TRUE))
@@ -1038,6 +1039,7 @@ test_that("emr_ids_vals_coverage works", {
     emr_track.logical.create("l18", "ph1", 18)
 
     df <- emr_extract("ph1", keepref = TRUE)
+    emr_track.addto("patients.dob", src = data.frame(id = 2510, time = 0, ref = -1, value = 0))
     emr_track.import("p15", space = "global", categorical = TRUE, src = df %>% dplyr::filter(ph1 == 15) %>% dplyr::select(id, time, ref, value = ph1))
     emr_track.import("p18", space = "global", categorical = TRUE, src = df %>% dplyr::filter(ph1 == 18) %>% dplyr::select(id, time, ref, value = ph1))
     withr::defer(emr_track.rm("p15", force = TRUE))
@@ -1105,6 +1107,7 @@ test_that("emr_track.ids works on logical tracks", {
     emr_track.logical.create("l15", "ph1", 15)
     emr_track.logical.create("l18", "ph1", 18)
 
+    emr_track.addto("patients.dob", src = data.frame(id = 2510, time = 0, ref = -1, value = 0))
     df <- emr_extract("ph1", keepref = TRUE)
     emr_track.import("p15", space = "global", categorical = TRUE, src = df %>% dplyr::filter(ph1 == 15) %>% dplyr::select(id, time, ref, value = ph1))
     emr_track.import("p18", space = "global", categorical = TRUE, src = df %>% dplyr::filter(ph1 == 18) %>% dplyr::select(id, time, ref, value = ph1))
@@ -1133,6 +1136,7 @@ test_that("emr_track.ids works on logical tracks with dense source", {
     emr_track.logical.create("l9", "track8", 9)
     emr_track.logical.create("l2", "track8", 2)
 
+    emr_track.addto("patients.dob", src = data.frame(id = 2510, time = 0, ref = -1, value = 0))
     df <- emr_extract("track8", keepref = TRUE)
     emr_track.import("p9", space = "global", categorical = TRUE, src = df %>% dplyr::filter(track8 == 9) %>% dplyr::select(id, time, ref, value = track8))
     emr_track.import("p2", space = "global", categorical = TRUE, src = df %>% dplyr::filter(track8 == 2) %>% dplyr::select(id, time, ref, value = track8))
@@ -1656,6 +1660,30 @@ test_that("emr_track.rm when physical track is removed, all dependent logical ar
     withr::defer(emr_track.rm("l1_ph", force = TRUE))
 })
 
+test_that("emr_track.rm with multiple tracks when physical track are removed, all dependent logical are removed", {
+    withr::defer(clean_logical_tracks())
+
+    emr_filter.create("f1", src = "ph1", val = seq(4, 16, 1), keepref = TRUE)
+    df <- emr_extract("ph1", names = c("value"), keepref = TRUE, filter = "f1")
+    emr_track.import("l1_ph", space = "global", categorical = TRUE, src = df)
+    emr_track.import("l2_ph", space = "global", categorical = TRUE, src = df)
+
+    emr_track.logical.create("l1", "l1_ph", seq(4, 16, 1))
+    emr_track.logical.create("l2", "l2_ph", seq(4, 16, 1))
+    emr_track.var.set("l1", "var", 1:10)
+    emr_track.var.set("l2", "var", 1:10)
+
+    emr_track.rm(c("l1_ph", "l2_ph"), force = TRUE)
+
+    expect_error(emr_track.var.get("l1", "var"))
+    expect_false(emr_track.exists("l1"))
+    expect_error(emr_track.var.get("l2", "var"))
+    expect_false(emr_track.exists("l2"))
+
+    withr::defer(emr_track.rm("l1_ph", force = TRUE))
+    withr::defer(emr_track.rm("l2_ph", force = TRUE))
+})
+
 test_that("emr_track.attr.get returns correct output on a logical track", {
     withr::defer(clean_attributes())
     withr::defer(clean_logical_tracks())
@@ -1843,4 +1871,36 @@ test_that("emr_track.rm removes the track attributes for logical tracks", {
     expect_error(emr_track.attr.get("l1", "var1"))
     expect_equal(emr_track.attr.export(), initial_attrs)
     expect_false(file.exists(attrs_file))
+})
+
+test_that("emr_track.rm of multiple tracks removes the track attributes for logical tracks", {
+    withr::defer(clean_attributes())
+    withr::defer(clean_logical_tracks())
+    initial_attrs <- emr_track.attr.export()
+    emr_track.logical.create("l1", "track1")
+    emr_track.attr.set("l1", "var1", "val1")
+    emr_track.logical.create("l2", "track1")
+    emr_track.attr.set("l2", "var1", "val1")
+    attrs_file1 <- file.path(.naryn$EMR_GROOT, "logical", ".l1.attrs")
+    attrs_file2 <- file.path(.naryn$EMR_GROOT, "logical", ".l2.attrs")
+    expect_true(file.exists(attrs_file1))
+    expect_true(file.exists(attrs_file2))
+    expect_equal(emr_track.attr.get("l1", "var1"), "val1")
+    expect_equal(emr_track.attr.get("l2", "var1"), "val1")
+    emr_track.rm(c("l1", "l2"), force = TRUE)
+    expect_error(emr_track.attr.get("l1", "var1"))
+    expect_error(emr_track.attr.get("l2", "var1"))
+    expect_equal(emr_track.attr.export(), initial_attrs)
+    expect_false(file.exists(attrs_file1))
+    expect_false(file.exists(attrs_file2))
+})
+
+test_that("logical tracks are reloaded after switching dbs", {
+    withr::defer(clean_logical_tracks())
+    emr_track.logical.create("l1", "track1")
+    first_db <- emr_db.ls()[1]
+    load_test_db()
+    expect_length(emr_track.logical.ls(), 0)
+    emr_db.connect(first_db)
+    expect_equal(emr_track.logical.ls(), "l1")
 })
