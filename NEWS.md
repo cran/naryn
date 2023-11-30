@@ -1,3 +1,13 @@
+# naryn 2.6.25
+
+* Fixed clang warnings.
+* Fix: filter name to include operator when name is automatically generated
+
+# naryn 2.6.24
+
+* Allow filters names with a dot when creating an automatic virtual track name.
+* Fixed an error when multiple processes are calling `emr_track.var.set` on the same track.
+
 # naryn 2.6.23 
 
 * Fixed memory misalignment errors.

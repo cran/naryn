@@ -231,7 +231,7 @@
 #' Generate a default name for a naryn filter
 #'
 #' Given filter parameters, generate a name with the following format:
-#' "f_{src}.kr{keepref}.vals_{val}.ts_{time.shift}.exp_{expiration}.op_{operator}"
+#' "f_(src).kr(keepref).vals_(val).ts_(time.shift).exp_(expiration).op_(operator)"
 #' Where for 'val' and 'time.shift' the values are separated by an
 #' underscore.
 #'
@@ -469,7 +469,7 @@ emr_filter.create <- function(filter, src, keepref = FALSE, time.shift = NULL, v
 
     auto_filter <- FALSE
     if (is.null(filter)) {
-        filter <- emr_filter.name(src, keepref, time.shift, val, expiration)
+        filter <- emr_filter.name(src, keepref, time.shift, val, expiration, operator)
         auto_filter <- TRUE
     }
 
