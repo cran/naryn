@@ -1,6 +1,23 @@
+# naryn 2.6.30 
+
+* Removed non-API calls to R in the C++ code.
+
+# naryn 2.6.29 
+
+* Fixed *noRemap* additional issue by adding `Rf_` prefix in the c++ code.
+
+# naryn 2.6.28 
+
+* Fix: `emr_track.mv` did not move track attributes. 
+* "exists" virtual track function without parameters now checks for existence of any value.
+
+# naryn 2.6.27
+
+* Fix: do not truncate expression names in `emr_extract` when `tidy=TRUE`.
+
 # naryn 2.6.26 
 
-* Fixed compilation warnings on M1 Mac.
+* Added `emr_time2posix`, `emr_posix2time`,  `emr_time2char` and `emr_char2time` functions.
 
 # naryn 2.6.25
 

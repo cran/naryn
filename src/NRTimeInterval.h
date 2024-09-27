@@ -3,6 +3,9 @@
 
 #include <vector>
 
+#ifndef R_NO_REMAP
+#  define R_NO_REMAP
+#endif
 #include <R.h>
 #include <Rinternals.h>
 
@@ -13,6 +16,7 @@
 #undef error
 #endif
 
+#include "naryn.h"
 #include "EMRTimeInterval.h"
 #include "EMRTimeStamp.h"
 

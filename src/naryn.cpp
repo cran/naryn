@@ -76,19 +76,19 @@ Naryn::Naryn(SEXP _env, bool check_db) :
 
 		struct sigaction new_act;
 
-		// install a new SIGINT handler
+		// Rf_install a new SIGINT handler
 		new_act.sa_handler = sigint_handler;
 		sigemptyset(&new_act.sa_mask);
 		new_act.sa_flags = SA_RESTART;
 		sigaction(SIGINT, &new_act, &s_old_sigint_act);
 
-        // install a new SIGALRM handler
+        // Rf_install a new SIGALRM handler
         new_act.sa_handler = sigalrm_handler;
         sigemptyset(&new_act.sa_mask);
         new_act.sa_flags = SA_RESTART;
         sigaction(SIGALRM, &new_act, &s_old_sigalrm_act);
 
-        // install a new SIGCHLD handler
+        // Rf_install a new SIGCHLD handler
         new_act.sa_handler = sigchld_handler;
         sigemptyset(&new_act.sa_mask);
         new_act.sa_flags = SA_RESTART | SA_NOCLDSTOP;
@@ -169,7 +169,7 @@ Naryn::~Naryn()
         // reset alarm, otherwise it might fire later when we exit from the library
         alarm(0);
 
-		// install old signal handlers
+		// Rf_install old signal handlers
 		sigaction(SIGINT, &s_old_sigint_act, NULL);
         sigaction(SIGALRM, &s_old_sigalrm_act, NULL);
         sigaction(SIGCHLD, &s_old_sigchld_act, NULL);
@@ -188,7 +188,7 @@ Naryn::~Naryn()
 	}
 
 	// deal with PROTECT / UNPROTECT
-	unprotect(s_protect_counter - m_old_protect_count);
+	runprotect(s_protect_counter - m_old_protect_count);
 	s_protect_counter = m_old_protect_count;
 
 	if (!s_ref_count)
@@ -302,14 +302,14 @@ pid_t Naryn::launch_process()
         sigaction(SIGALRM, &s_old_sigalrm_act, NULL);
 		sigaction(SIGCHLD, &s_old_sigchld_act, NULL);
 
-		SEXP r_multitasking_stdout = GetOption(install("emr_multitasking_stdout"), R_NilValue);
+		SEXP r_multitasking_stdout = Rf_GetOption(Rf_install("emr_multitasking_stdout"), R_NilValue);
 
         int devnull;
         if ((devnull = open("/dev/null", O_RDWR)) == -1){
             verror("Failed to open /dev/null");
         }
 
-        if (!isLogical(r_multitasking_stdout) || !(int)LOGICAL(r_multitasking_stdout)[0]) {
+        if (!Rf_isLogical(r_multitasking_stdout) || !(int)LOGICAL(r_multitasking_stdout)[0]) {
             dup2(devnull, STDOUT_FILENO);
         }
 
@@ -451,7 +451,7 @@ void Naryn::handle_error(const char *msg)
 		}
 		rexit();
 	} else {
-		errorcall(R_NilValue, "%s", msg);
+		Rf_errorcall(R_NilValue, "%s", msg);
     }
 }
 
@@ -495,45 +495,45 @@ void Naryn::load_options()
 {
 	SEXP rvar;
 
-    rvar = GetOption(install("emr_debug"), R_NilValue);
-    if (isLogical(rvar)){
-        m_debug = asLogical(rvar);
+    rvar = Rf_GetOption(Rf_install("emr_debug"), R_NilValue);
+    if (Rf_isLogical(rvar)){
+        m_debug = Rf_asLogical(rvar);
     }
 
-    rvar = GetOption(install("emr_multitasking"), R_NilValue);
-    if (isLogical(rvar)){
-        m_multitasking_avail = asLogical(rvar);
+    rvar = Rf_GetOption(Rf_install("emr_multitasking"), R_NilValue);
+    if (Rf_isLogical(rvar)){
+        m_multitasking_avail = Rf_asLogical(rvar);
     }
 
-    rvar = GetOption(install("emr_min.processes"), R_NilValue);
-    if ((isReal(rvar) || isInteger(rvar)) && asInteger(rvar) >= 1){
-        m_min_processes = asInteger(rvar);
+    rvar = Rf_GetOption(Rf_install("emr_min.processes"), R_NilValue);
+    if ((Rf_isReal(rvar) || Rf_isInteger(rvar)) && Rf_asInteger(rvar) >= 1){
+        m_min_processes = Rf_asInteger(rvar);
     }
 
-    rvar = GetOption(install("emr_max.processes"), R_NilValue);
-    if ((isReal(rvar) || isInteger(rvar)) && asInteger(rvar) >= 1){
-        m_max_processes = asInteger(rvar);
+    rvar = Rf_GetOption(Rf_install("emr_max.processes"), R_NilValue);
+    if ((Rf_isReal(rvar) || Rf_isInteger(rvar)) && Rf_asInteger(rvar) >= 1){
+        m_max_processes = Rf_asInteger(rvar);
     }
     m_max_processes = max(m_min_processes, m_max_processes);
 
-	rvar = GetOption(install("emr_max.data.size"), R_NilValue);
-	if ((isReal(rvar) || isInteger(rvar)) && asReal(rvar) >= 1){
-		m_max_data_size = (uint64_t)asReal(rvar);
+	rvar = Rf_GetOption(Rf_install("emr_max.data.size"), R_NilValue);
+	if ((Rf_isReal(rvar) || Rf_isInteger(rvar)) && Rf_asReal(rvar) >= 1){
+		m_max_data_size = (uint64_t)Rf_asReal(rvar);
     }
 
-    rvar = GetOption(install("emr_eval.buf.size"), R_NilValue);
-    if ((isReal(rvar) || isInteger(rvar)) && asInteger(rvar) >= 1){
-        m_eval_buf_size = asInteger(rvar);
+    rvar = Rf_GetOption(Rf_install("emr_eval.buf.size"), R_NilValue);
+    if ((Rf_isReal(rvar) || Rf_isInteger(rvar)) && Rf_asInteger(rvar) >= 1){
+        m_eval_buf_size = Rf_asInteger(rvar);
     }
 
-	rvar = GetOption(install("emr_quantile.edge.data.size"), R_NilValue);
-	if ((isReal(rvar) || isInteger(rvar)) && asReal(rvar) >= 0){
-		m_quantile_edge_data_size = (uint64_t)asReal(rvar);
+	rvar = Rf_GetOption(Rf_install("emr_quantile.edge.data.size"), R_NilValue);
+	if ((Rf_isReal(rvar) || Rf_isInteger(rvar)) && Rf_asReal(rvar) >= 0){
+		m_quantile_edge_data_size = (uint64_t)Rf_asReal(rvar);
     }
 
-    rvar = GetOption(install("emr_warning.itr.no.filter.size"), R_NilValue);
-    if ((isReal(rvar) || isInteger(rvar)) && asReal(rvar) >= 1){
-        m_beat_itr_warning_size = (uint64_t)asReal(rvar);
+    rvar = Rf_GetOption(Rf_install("emr_warning.itr.no.filter.size"), R_NilValue);
+    if ((Rf_isReal(rvar) || Rf_isInteger(rvar)) && Rf_asReal(rvar) >= 1){
+        m_beat_itr_warning_size = (uint64_t)Rf_asReal(rvar);
     }
 }
 
@@ -680,25 +680,43 @@ void vwarning(const char *fmt, ...)
 
 void vdebug(const char *fmt, ...)
 {
-    if (g_naryn->debug()) {
+    if (g_naryn->debug())
+    {
         struct timeval tmnow;
         struct tm *tm;
-        char buf[30];
+        char timebuf[30];
         gettimeofday(&tmnow, NULL);
         tm = localtime(&tmnow.tv_sec);
-        strftime(buf, sizeof(buf), "%H:%M:%S", tm);
-        REprintf("[DEBUG pid %d, %s.%03d] ", (int)getpid(), buf, (int)(tmnow.tv_usec / 1000));
+        strftime(timebuf, sizeof(timebuf), "%H:%M:%S", tm);
 
+        // Print the timestamp and pid
+        REprintf("[DEBUG pid %d, %s.%03d] ", (int)getpid(), timebuf, (int)(tmnow.tv_usec / 1000));
+
+        // Use a vector to store the formatted string
+        std::vector<char> buf;
         va_list ap;
-    	va_start(ap, fmt);        
-        int ret = vsnprintf(buf, sizeof(buf), fmt, ap);
-        if (ret < 0){
-            TGLError("null format string");
-        }
-        va_end(ap);
-        REprintf("%s", buf);
+        va_start(ap, fmt);
 
-        if (!*fmt || (*fmt && fmt[strlen(fmt) - 1] != '\n'))
+        // Determine required buffer size
+        va_list ap_copy;
+        va_copy(ap_copy, ap);
+        int size = vsnprintf(nullptr, 0, fmt, ap_copy) + 1; // +1 for null terminator
+        va_end(ap_copy);
+
+        if (size > 0)
+        {
+            buf.resize(size);
+            vsnprintf(buf.data(), size, fmt, ap);
+            REprintf("%s", buf.data());
+        }
+        else
+        {
+            REprintf("Error in formatting debug message");
+        }
+
+        va_end(ap);
+
+        if (!*fmt || fmt[strlen(fmt) - 1] != '\n')
             REprintf("\n");
     }
 }
@@ -715,7 +733,7 @@ SEXP rprotect(SEXP &expr)
 void runprotect(int count)
 {
 	if (Naryn::s_protect_counter < (unsigned)count){
-		errorcall(R_NilValue, "Number of calls to unprotect exceeds the number of calls to protect\n");
+		Rf_errorcall(R_NilValue, "Number of calls to runprotect exceeds the number of calls to protect\n");
     }
 	UNPROTECT(count);
 	Naryn::s_protect_counter -= count;
@@ -725,7 +743,7 @@ void runprotect(SEXP &expr)
 {
 	if (expr != R_NilValue) {
 		if (Naryn::s_protect_counter < 1)
-			errorcall(R_NilValue, "Number of calls to unprotect exceeds the number of calls to protect\n");
+			Rf_errorcall(R_NilValue, "Number of calls to runprotect exceeds the number of calls to protect\n");
 		UNPROTECT_PTR(expr);
 		expr = R_NilValue;
 		Naryn::s_protect_counter--;
@@ -748,9 +766,9 @@ void runprotect_all()
 const char *get_groot(SEXP envir)
 {
 	// no need to protect the returned value
-	SEXP groot = findVar(install("GROOT"), envir);
+	SEXP groot = Rf_findVar(Rf_install("GROOT"), envir);
 
-	if (!isString(groot))
+	if (!Rf_isString(groot))
 		verror("GROOT variable does not exist");
 
 	return CHAR(STRING_ELT(groot, 0));
@@ -759,9 +777,9 @@ const char *get_groot(SEXP envir)
 const char *get_glib_dir(SEXP envir)
 {
 	// no need to protect the returned value
-	SEXP glibdir = findVar(install(".GLIBDIR"), envir);
+	SEXP glibdir = Rf_findVar(Rf_install(".GLIBDIR"), envir);
 
-	if (!isString(glibdir))
+	if (!Rf_isString(glibdir))
 		verror(".GLIBDIR variable does not exist");
 
 	return CHAR(STRING_ELT(glibdir, 0));
@@ -769,13 +787,28 @@ const char *get_glib_dir(SEXP envir)
 
 SEXP eval_in_R(SEXP parsed_command, SEXP envir)
 {
-	int check_error;
-	SEXP res;
+    int check_error;
+    SEXP res;
+    SEXP err_call;
 
-	rprotect(res = R_tryEval(parsed_command, envir, &check_error));
-	if (check_error)
-		verror(R_curErrorBuf());
-	return res;
+    rprotect(res = R_tryEval(parsed_command, envir, &check_error));
+    if (check_error)
+    {
+        // Get the last error message
+        PROTECT(err_call = Rf_lang1(Rf_install("geterrmessage")));
+        SEXP err_msg = R_tryEval(err_call, R_GlobalEnv, &check_error);
+        UNPROTECT(1);
+
+        if (!check_error && TYPEOF(err_msg) == STRSXP && LENGTH(err_msg) > 0)
+        {
+            verror(CHAR(STRING_ELT(err_msg, 0)));
+        }
+        else
+        {
+            verror("R evaluation error: Unknown error");
+        }
+    }
+    return res;
 }
 
 SEXP run_in_R(const char *command, SEXP envir)
@@ -786,7 +819,7 @@ SEXP run_in_R(const char *command, SEXP envir)
 	ParseStatus status;
 
 	rprotect(expr = RSaneAllocVector(STRSXP, 1));
-	SET_STRING_ELT(expr, 0, mkChar(command));
+	SET_STRING_ELT(expr, 0, Rf_mkChar(command));
 	rprotect(parsed_expr = R_ParseVector(expr, -1, &status, R_NilValue));
 	if (status != PARSE_OK)
 		verror("Failed to parse expression \"%s\"", command);
@@ -884,7 +917,7 @@ struct RSaneAllocVectorData {
 static void RSaneAllocVectorCallback(void *_data)
 {
 	RSaneAllocVectorData *data = (RSaneAllocVectorData *)_data;
-    data->retv = allocVector(data->type, data->len);
+    data->retv = Rf_allocVector(data->type, data->len);
 }
 
 SEXP RSaneAllocVector(SEXPTYPE type, R_xlen_t len)
@@ -901,16 +934,16 @@ SEXP RSaneAllocVector(SEXPTYPE type, R_xlen_t len)
 
 SEXP get_rvector_col(SEXP v, const char *colname, const char *varname, bool error_if_missing)
 {
-	SEXP colnames = getAttrib(v, R_NamesSymbol);
+	SEXP colnames = Rf_getAttrib(v, R_NamesSymbol);
 
-	if (!isVector(v) ||
-		(Rf_length(v) && !isString(colnames)) || 
+	if (!Rf_isVector(v) ||
+		(Rf_length(v) && !Rf_isString(colnames)) || 
         (Rf_length(colnames) != Rf_length(v)) ||
-		(!Rf_length(v) && !isNull(colnames))){
+		(!Rf_length(v) && !Rf_isNull(colnames))){
 		verror("Invalid format of %s", varname);
     }
 
-	int numcols = isNull(colnames) ? 0 : Rf_length(colnames);
+	int numcols = Rf_isNull(colnames) ? 0 : Rf_length(colnames);
 
 	for (int i = 0; i < numcols; i++) {
 		if (!strcmp(CHAR(STRING_ELT(colnames, i)), colname))
@@ -937,9 +970,9 @@ string get_bound_colname(const char *str, unsigned maxlen)
 
 void get_expression_vars(const string &expr, vector<string>& vars){
     SEXP e;
-    SEXP r_expr = mkString(expr.c_str());
+    SEXP r_expr = Rf_mkString(expr.c_str());
 
-    PROTECT(e = lang2(install(".emr_expr_vars"), r_expr));
+    PROTECT(e = Rf_lang2(Rf_install(".emr_expr_vars"), r_expr));
     SEXP res = R_tryEval(e, g_naryn->env(), NULL);
     UNPROTECT(1);
 
