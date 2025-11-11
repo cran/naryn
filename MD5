@@ -1,12 +1,12 @@
-59ebe225b916a39663af2891513bc372 *DESCRIPTION
+3ec737ae0a27dab2724f84e8a66ab97b *DESCRIPTION
 8a698e61ab8cc6c6557c7995a1939433 *LICENSE
 f4b314eda6d61aa249c0e1d61470a1bd *NAMESPACE
-98d7ccdc16f7a9d47c5604da36cb0b5e *NEWS.md
-2d936da6b78de61d3b5878b27db1bf07 *R/db.R
+9da6477f637c2e866ae5a292cd86c8c4 *NEWS.md
+a20b8b2f6547fc4f9a9f121addf75dc6 *R/db.R
 71b62f96b5ed59e4cbed8db899d43063 *R/entries.R
 2ce61737d43c5a80c5a4b8232be52c80 *R/example-data.R
 110ef655ec25576d6657f9fd47f58308 *R/extract.R
-4ee0b37ee86c8c6756cfb3dc1ad43056 *R/filter.R
+65a075b1b4cb837e8510e8bff0215647 *R/filter.R
 bdd48fe3e6596662f887946498d2774e *R/globals.R
 b7a3990e05ee2bf94022ad3f2fbd5ddd *R/iterator.R
 87bf7d3116060f31bbbdba5f5d160b5e *R/logical-track.R
@@ -25,7 +25,7 @@ a2cc852c1628596c0a501cbebc53b0f7 *build/vignette.rds
 6e4ca7342cb3845e7bb5d423ad4d931a *inst/WORDLIST
 ea1b4f506c9c645f08a85dbd97ed1216 *inst/doc/advanced.R
 41d2c1943d17574ed5b2a144324bcb5f *inst/doc/advanced.Rmd
-99b0fdd2fe1d823b8d23e39353fca274 *inst/doc/advanced.html
+e3cc5f8e2c1c3a05bd41bc06978b8fb4 *inst/doc/advanced.html
 67e66863f7757acca52e391d2703bd8f *inst/testdb.tar.gz
 25a997a6cf5abc9bcc578e6ca1ff9b23 *man/dot-create_logical_track_filter.Rd
 ffca14eef5b40e3fd6ada3b55af9300d *man/dot-emr_expr_vars.Rd
@@ -35,7 +35,7 @@ d9234897975a038ce997bfa3fbd21a25 *man/dot-emr_filter.Rd
 129e74b4f8fa87d3dc20742ebd1c1ed3 *man/emr_annotate.Rd
 ebbd4a6f262f18b33ec838a29c69c185 *man/emr_cor.Rd
 f0afe17492a7216991cde6d5d2a0ea65 *man/emr_date2time.Rd
-2ef05f42afc1f7c22a29e1f638e8cca5 *man/emr_db.connect.Rd
+ec01b4f64425a8fd7a3968f370d8141c *man/emr_db.connect.Rd
 f7dfc1e66777664cbdd4cd06fafc3159 *man/emr_db.reload.Rd
 232b3437f5e575e64a5e48c77c777130 *man/emr_db.subset.Rd
 1e4aafd43857718d8225bdb4de508920 *man/emr_db.subset.ids.Rd
@@ -172,7 +172,7 @@ e5084c3e5a63ff74b3022662ee7bf51a *src/NRPoint.h
 2a380c76967e7f31a8eece13d572f9ce *src/NRQuantiles.cpp
 49c6ca5b9b90f7d6cafb2e4c605c1aec *src/NRScreen.cpp
 54f84a3886c09edc10cbe0effdcb41e8 *src/NRSummary.cpp
-77b5864ca85cfe65b2796efc35e80706 *src/NRTest.cpp
+43f2152880e82c28b8031db1e15a7af4 *src/NRTest.cpp
 5c1a36779bc91ebdedf510dc8c83ffb8 *src/NRTimeConverter.cpp
 2613d01f7d0b3dd1be10d98844ca6d35 *src/NRTimeInterval.cpp
 7e2cfe8280ec88d34d3bcbb60ad04705 *src/NRTimeInterval.h
@@ -190,7 +190,7 @@ deeedcf3b48734ecc2381c433ea2a493 *src/StreamSampler.h
 c72b99371f4e92e538b8dc93c265e6fb *src/TGLException.h
 4f2b05b52f999239d8ba24f2f0a730ce *src/Thread.h
 449fa64fac5c63eda8c628faf9e66725 *src/naryn-init.cpp
-cd83205d1496959a823f193a84271bb4 *src/naryn.cpp
+f87f4c572207be0b6b017200c969ed3a *src/naryn.cpp
 de65d8e3bb457b14081a8a558944e8c7 *src/naryn.h
 1fd0700c92c469188b7bca6fd93d4c2c *src/strutil.cpp
 d2e3cbef7b54d1d6e8293d24bf981ad6 *src/strutil.h
