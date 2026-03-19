@@ -1,7 +1,7 @@
 Type: Package
 Package: naryn
 Title: Native Access Medical Record Retriever for High Yield Analytics
-Version: 2.6.32
+Version: 2.6.34
 Authors@R: c(
     person("Misha", "Hoichman", , "misha@hoichman.com", role = "aut"),
     person("Aviezer", "Lifshitz", , "aviezer.lifshitz@weizmann.ac.il", role = c("aut", "cre")),
@@ -33,8 +33,8 @@ Language: en-US
 LazyLoad: yes
 NeedsCompilation: yes
 OS_type: unix
-RoxygenNote: 7.3.2
-Packaged: 2026-01-18 17:42:27 UTC; aviezerl
+RoxygenNote: 7.3.3
+Packaged: 2026-03-19 21:35:00 UTC; aviezerl
 Author: Misha Hoichman [aut],
   Aviezer Lifshitz [aut, cre],
   Ben Gilat [aut],
@@ -43,4 +43,4 @@ Author: Misha Hoichman [aut],
   Weizmann Institute of Science [cph]
 Maintainer: Aviezer Lifshitz <aviezer.lifshitz@weizmann.ac.il>
 Repository: CRAN
-Date/Publication: 2026-01-18 23:30:02 UTC
+Date/Publication: 2026-03-19 22:00:02 UTC

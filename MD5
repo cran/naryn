@@ -1,7 +1,7 @@
-ffc98da33f495c26e8bc0b25bd678a73 *DESCRIPTION
+00bf4bf338375c74657df1068e4add6a *DESCRIPTION
 8a698e61ab8cc6c6557c7995a1939433 *LICENSE
 f4b314eda6d61aa249c0e1d61470a1bd *NAMESPACE
-d49d10dadfca7c039311a1db339855b3 *NEWS.md
+99d880e4b8a59b874e7f5cdfeae6c6ec *NEWS.md
 7d7e5d5e439b0554917e9bf124a2b68e *R/db.R
 71b62f96b5ed59e4cbed8db899d43063 *R/entries.R
 2ce61737d43c5a80c5a4b8232be52c80 *R/example-data.R
@@ -16,7 +16,7 @@ b7a3990e05ee2bf94022ad3f2fbd5ddd *R/iterator.R
 8a3082f528997abe93b45a9f19a4e1e2 *R/track-vars.R
 3d004ca0282c37e3a9de98d3bf0625d9 *R/track.R
 5d6f6e2cfd08d82828051c4f9fed87e4 *R/utils-names.R
-3a5376565b374df4d6c495afcc33515c *R/utils-pipe.R
+ebfba0a34dc4c2f0b37ffce4face0c85 *R/utils-pipe.R
 a089ae5e06746942ed2992261f97632f *R/utils.R
 9e02fd2e8302b939cd6b958675c2df81 *R/vtrack.R
 601681626a2b0b4f0adfdc04cf5cd4f4 *R/zzz.R
@@ -110,7 +110,7 @@ a241eccf43783474243fb6d8dbaf0c3e *man/emr_vtrack.create_from_name.Rd
 a689f5fb49961a27781a53cb481bc4fd *man/emr_vtrack.name.Rd
 01e53e0020f8678b4d2d80c50d52c3b5 *man/emr_vtrack.rm.Rd
 dbb27d93b4747a9ad73d79881b786e38 *man/naryn-package.Rd
-774d9de8e95aa151215efcd304549d41 *man/pipe.Rd
+0946f2b9f79ffb887b578b156cbf165d *man/pipe.Rd
 0697cec11f4ef8dee64388d81ede42f8 *man/string_to_var.Rd
 e35ed0849c1824c80623ae0b98fcf5fb *man/var_to_string.Rd
 23996e5fa16f147a1cfebbff92e6d3a3 *src/BinFinder.cpp
@@ -163,9 +163,9 @@ c00ca6fac62a7a10e32d0ca74e1aae53 *src/NRIdTimeInterval.cpp
 3e05cb65ff22376386059e0703f279cd *src/NRIdTimeInterval.h
 225291fc70833fb7738a2de3533a2d57 *src/NRIdsDist.cpp
 e738e2843f05b6b560da109b60e77a43 *src/NRImport.cpp
-ced9114a608d60d19b585168190d39fa *src/NRIteratorFilter.cpp
+f50f16f7c508d87487ccacab85fb9541 *src/NRIteratorFilter.cpp
 2777f563a64d41bf335439c634b73f66 *src/NRIteratorFilter.h
-f2ec87e7b602480821b7dcdeb9f88dca *src/NRLogicalTrack.cpp
+1152257521c01c336789f388584fe91d *src/NRLogicalTrack.cpp
 9b22eb4dded32767e64fb99ab0fc372d *src/NRLogicalTrackInfo.cpp
 adca1b86294d0660090e7e0aaae7fccf *src/NRPoint.cpp
 e5084c3e5a63ff74b3022662ee7bf51a *src/NRPoint.h
@@ -178,8 +178,8 @@ e5084c3e5a63ff74b3022662ee7bf51a *src/NRPoint.h
 7e2cfe8280ec88d34d3bcbb60ad04705 *src/NRTimeInterval.h
 c616af8a1a273ca8ab3e41f02712d1d8 *src/NRTrack.cpp
 c2ecf62f65cdf9b2df40f1ba01ebfb70 *src/NRTrackCreate.cpp
-87fe5a825b66e6fba95e5ce57d2a697e *src/NRTrackExpressionScanner.cpp
-ed58876d040060273bb94873baf5dc12 *src/NRTrackExpressionScanner.h
+5da6b111dc34bd1fe39a3c32cd11d244 *src/NRTrackExpressionScanner.cpp
+071dcb65335026626cfa0fec35773f71 *src/NRTrackExpressionScanner.h
 d40ede3bce91974c800660a0dac00e68 *src/NRTrackExpressionVars.cpp
 acc17f950e0b57e17832c1d945e2cd69 *src/NRTrackExpressionVars.h
 f20f64e9fdecb39ddc30d14bfb1acf14 *src/NRUtils.cpp
@@ -190,8 +190,8 @@ deeedcf3b48734ecc2381c433ea2a493 *src/StreamSampler.h
 c72b99371f4e92e538b8dc93c265e6fb *src/TGLException.h
 4f2b05b52f999239d8ba24f2f0a730ce *src/Thread.h
 449fa64fac5c63eda8c628faf9e66725 *src/naryn-init.cpp
-f87f4c572207be0b6b017200c969ed3a *src/naryn.cpp
-de65d8e3bb457b14081a8a558944e8c7 *src/naryn.h
+c7ef36b42e55e54b86e1c982c28ada9a *src/naryn.cpp
+2184b59de05b05a6e51dcc74413b01a6 *src/naryn.h
 1fd0700c92c469188b7bca6fd93d4c2c *src/strutil.cpp
 d2e3cbef7b54d1d6e8293d24bf981ad6 *src/strutil.h
 92262a20660ecace2cb8c021a5bb49f7 *tests/spelling.R
